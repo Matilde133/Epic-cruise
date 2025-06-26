@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Epic Cruise</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Playfair Display', serif;
+    }
+    .fade-in {
+      animation: fadeIn 1s ease-in-out;
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .whatsapp-button-fixed {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body class="bg-white text-blue-900">
+
+  <!-- Hero com fundo de cruzeiro -->
+  <header class="relative h-[200px] bg-cover bg-center" style="background-image: url('https://source.unsplash.com/1600x900/?cruise,ocean');">
+    <div class="absolute inset-0 bg-blue-950 bg-opacity-90 flex flex-col items-center justify-center text-white text-center px-4">
+      <img src="https://i.postimg.cc/qtzQH3Fg/Logotipo-Epic-Cruise.png" alt="Epic Cruise Logo" class="w-20 h-20 mb-2">
+      <h1 class="text-3xl font-extrabold tracking-wide drop-shadow">Epic Cruise</h1>
+      <p class="text-md mt-1 italic">Sea the World</p>
+    </div>
+  </header>
+
+  <!-- Sobre Nós -->
+  <section class="p-10 bg-blue-50 fade-in rounded-b-3xl">
+    <h2 class="text-3xl font-bold mb-4">Sobre Nós</h2>
+    <p class="text-lg leading-relaxed">
+      A Epic Cruise é uma agência especializada em cruzeiros com tudo incluído. Criamos experiências inesquecíveis com paragens em diferentes países, permitindo aos viajantes explorar novas culturas, paisagens e sabores de forma única e confortável.
+    </p>
+  </section>
+
+  <!-- Simulador -->
+  <section class="p-10 bg-blue-100 fade-in">
+    <h2 class="text-3xl font-bold mb-4">Simulador de Pacote</h2>
+    <form id="simulador" class="grid md:grid-cols-3 gap-6">
+      <div>
+        <label for="destino" class="block font-medium mb-1">Continente:</label>
+        <select id="destino" class="w-full p-2 border border-blue-300 rounded shadow-sm text-black">
+          <option value="europa">Europa</option>
+          <option value="asia">Ásia</option>
+          <option value="america">América</option>
+          <option value="novo">Novo - Atlântico Sul</option>
+        </select>
+      </div>
+      <div>
+        <label for="dias" class="block font-medium mb-1">Duração:</label>
+        <select id="dias" class="w-full p-2 border border-blue-300 rounded shadow-sm text-black">
+          <option value="10">10 dias</option>
+          <option value="14">14 dias</option>
+          <option value="21">21 dias</option>
+        </select>
+      </div>
+      <div>
+        <label for="experiencia" class="block font-medium mb-1">Experiência:</label>
+        <select id="experiencia" class="w-full p-2 border border-blue-300 rounded shadow-sm text-black">
+          <option value="cultural">Cultural</option>
+          <option value="aventura">Aventura</option>
+          <option value="luxo">Luxo</option>
+          <option value="familiar">Familiar</option>
+        </select>
+      </div>
+      <div>
+        <label for="adultos" class="block font-medium mb-1">Adultos:</label>
+        <input type="number" id="adultos" value="2" min="1" class="w-full p-2 border border-blue-300 rounded shadow-sm text-black">
+      </div>
+      <div>
+        <label for="criancas" class="block font-medium mb-1">Crianças:</label>
+        <input type="number" id="criancas" value="0" min="0" class="w-full p-2 border border-blue-300 rounded shadow-sm text-black">
+      </div>
+      <div>
+        <label for="quarto" class="block font-medium mb-1">Tipo de Quarto:</label>
+        <select id="quarto" class="w-full p-2 border border-blue-300 rounded shadow-sm text-black" onchange="mostrarImagemCabine()">
+          <option value="Suíte premium com varanda e vista panorâmica">Suíte premium com varanda e vista panorâmica - Tudo incluído</option>
+          <option value="Cabine suítes premium">Cabine suítes premium - Tudo incluído</option>
+          <option value="Cabine standard">Cabine standard - Tudo incluído</option>
+        </select>
+      </div>
+    </form>
+
+    <div class="mt-6 text-center">
+      <button type="button" onclick="mostrarPacote()" class="bg-blue-700 text-white px-6 py-3 rounded-full shadow-md hover:bg-blue-600 transition-all">Ver Orçamento</button>
+    </div>
+
+    <div class="mt-6 flex flex-col items-center">
+      <img id="imagem-cabine" src="https://i.postimg.cc/KYz90hBk/yc3-msc-yacht-club-royal-suite-tile-desktop-460x360.avif" alt="Imagem da cabine" class="rounded-lg shadow-md w-full max-w-md">
+      <p id="legenda-cabine" class="mt-2 text-sm text-blue-900 font-medium">Suíte premium com varanda e vista panorâmica</p>
+    </div>
+
+    <div id="resultado" class="mt-6 p-6 bg-blue-200 rounded shadow-md text-lg hidden text-blue-900 text-left"></div>
+
+    <div id="whatsapp" class="md:col-span-2 text-center mt-4 hidden">
+      <a id="whatsapp-link" target="_blank" class="inline-block bg-green-500 text-white px-6 py-3 rounded-full shadow hover:bg-green-600 transition">
+        Enviar Orçamento via WhatsApp
+      </a>
+    </div>
+  </section>
+
+  <!-- Botão flutuante WhatsApp -->
+  <a href="https://wa.me/351933688211" target="_blank" class="whatsapp-button-fixed bg-green-500 hover:bg-green-600 text-white p-3 rounded-full shadow-lg">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16.72 13.06a10.94 10.94 0 01-4.19 4.19l-3.73-.99L4 20l1.74-4.8-.99-3.73a10.94 10.94 0 014.19-4.19 10.94 10.94 0 0110.8 0c.53.26.94.66 1.2 1.2a10.94 10.94 0 010 10.8c-.26.53-.66.94-1.2 1.2a10.94 10.94 0 01-10.8 0z" />
+    </svg>
+  </a>
+
+  <!-- Contato -->
+  <section class="p-10 bg-blue-100 fade-in">
+    <h2 class="text-3xl font-bold mb-4">Contato</h2>
+    <form class="grid gap-4 md:grid-cols-2">
+      <input type="text" placeholder="Nome" class="p-3 border border-blue-300 rounded shadow-sm text-black">
+      <input type="email" placeholder="Email" class="p-3 border border-blue-300 rounded shadow-sm text-black">
+      <textarea placeholder="Mensagem" class="md:col-span-2 p-3 border border-blue-300 rounded shadow-sm text-black"></textarea>
+      <div class="md:col-span-2 text-sm text-gray-600">Pode copiar o orçamento acima e enviar diretamente via WhatsApp para <a href="https://wa.me/351933688211" class="text-green-600 font-semibold hover:underline" target="_blank">+351 933 688 211</a>.</div>
+      <button type="submit" class="md:col-span-2 bg-blue-700 text-white px-6 py-3 rounded-full hover:bg-blue-600 transition-all">Enviar</button>
+    </form>
+  </section>
+
+  <script>
+    function mostrarImagemCabine() {
+      const quarto = document.getElementById('quarto').value;
+      const imagem = document.getElementById('imagem-cabine');
+      const legenda = document.getElementById('legenda-cabine');
+
+      if (quarto.includes('standard')) {
+        imagem.src = 'https://i.postimg.cc/KvBCTbDm/standard.webp';
+        legenda.textContent = 'Cabine standard';
+      } else if (quarto.includes('suítes premium')) {
+        imagem.src = 'https://i.postimg.cc/WzrY0mr5/images-7.jpg';
+        legenda.textContent = 'Cabine suítes premium';
+      } else if (quarto.includes('vista panorâmica')) {
+        imagem.src = 'https://i.postimg.cc/KYz90hBk/yc3-msc-yacht-club-royal-suite-tile-desktop-460x360.avif';
+        legenda.textContent = 'Suíte premium com varanda e vista panorâmica';
+      }
+    }
+
+    function mostrarPacote() {
+      const destino = document.getElementById('destino').value;
+      const dias = document.getElementById('dias').value;
+      const experiencia = document.getElementById('experiencia').value;
+      const adultos = parseInt(document.getElementById('adultos').value);
+      const criancas = parseInt(document.getElementById('criancas').value);
+      const quarto = document.getElementById('quarto').value;
+      const resultado = document.getElementById('resultado');
+      const whatsappDiv = document.getElementById('whatsapp');
+      const whatsappLink = document.getElementById('whatsapp-link');
+
+      const roteiros = {
+        europa: "Lisboa, Barcelona, Roma, Atenas",
+        asia: "Dubai, Mumbai, Singapura, Bangkok",
+        america: "Miami, Havana, Cartagena, Rio de Janeiro",
+        novo: "Lisboa, Funchal, Madeira, Bridgetown (Barbados), San Juan (Porto Rico), Ilhas Virgens, Cancún (México)"
+      };
+
+      const precos = {
+        europa: { adulto: 2750, crianca: 2500 },
+        asia: { adulto: 3000, crianca: 2000 },
+        america: { adulto: 3200, crianca: 2100 },
+        novo: { adulto: 3880, crianca: 3630 }
+      };
+
+      const roteiro = roteiros[destino];
+      const precoAdulto = precos[destino].adulto;
+      const precoCrianca = precos[destino].crianca;
+      const total = (adultos * precoAdulto) + (criancas * precoCrianca);
+
+      const textoHTML = `
+        <strong>Roteiro:</strong> ${roteiro}<br>
+        <strong>Duração:</strong> ${dias} dias<br>
+        <strong>Tipo de experiência:</strong> ${experiencia.charAt(0).toUpperCase() + experiencia.slice(1)}<br>
+        <strong>Tipo de quarto:</strong> ${quarto}<br>
+        <strong>Adultos:</strong> ${adultos} x €${precoAdulto}<br>
+        <strong>Crianças:</strong> ${criancas} x €${precoCrianca}<br>
+        <strong>Orçamento estimado:</strong> <span class="font-bold text-blue-800 text-xl">€${total}</span>
+      `;
+
+      resultado.innerHTML = textoHTML;
+      resultado.classList.remove('hidden');
+      resultado.classList.add('fade-in');
+
+      const msg = `Olá! Gostaria de receber o orçamento do Epic Cruise:\nRoteiro: ${roteiro}\nDuração: ${dias} dias\nExperiência: ${experiencia}\nTipo de quarto: ${quarto}\nAdultos: ${adultos}\nCrianças: ${criancas}\nTotal estimado: €${total}`;
+      const msgEncoded = encodeURIComponent(msg);
+      whatsappLink.href = `https://wa.me/351933688211?text=${msgEncoded}`;
+      whatsappDiv.classList.remove('hidden');
+
+      mostrarImagemCabine();
+    }
+  </script>
+
+</body>
+</html>
